@@ -1,0 +1,120 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Keep this email identical to ADMIN_EMAIL in .env.example.
+    // This project intentionally supports ONE store-owner administrator only (nrganna1@gmail.com).
+    // Previous admin email (nrganna2015@gmail.com) is completely revoked and denied admin privileges.
+    function isStoreOwner() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email is string
+        && request.auth.token.email.lower() == "nrganna1@gmail.com";
+    }
+    function isAdmin() { return isStoreOwner(); }
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function isValidProduct(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 200
+        && data.sellingPrice is number && data.sellingPrice >= 0
+        && (!('originalPrice' in data) || (data.originalPrice is number && data.originalPrice >= 0))
+        && (!('stock' in data) || (data.stock is number && data.stock >= 0))
+        && (!('description' in data) || (data.description is string && data.description.size() <= 2000))
+        && (!('category' in data) || (data.category is string && data.category.size() <= 100))
+        && (!('offerTag' in data) || (data.offerTag is string && data.offerTag.size() <= 100))
+        && (!('images' in data) || (data.images is list && data.images.size() <= 20));
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      // Non-admin users (including former admin nrganna2015@gmail.com) can only hold role == "customer".
+      // They can also downgrade their own profile from any prior role back to "customer", but never escalate to "admin".
+      allow create, update: if isAdmin() || (
+        isOwner(userId) && request.resource.data.role == "customer"
+      );
+      allow delete: if isAdmin();
+    }
+
+    match /admins/{docId} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin()
+        && (docId == "nrganna1@gmail.com" || docId == "admin_seed_check");
+      allow delete: if isAdmin()
+        && (docId == "admin_seed_check" || docId == "nrganna2015@gmail.com");
+    }
+
+    // Store catalog is public to read; only the single verified owner (nrganna1@gmail.com) can write.
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidProduct(request.resource.data);
+      allow delete: if isAdmin();
+    }
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /banners/{bannerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Guest customers may submit a booking, but only the owner can read or manage bookings.
+    // This prevents public access to customer phone numbers and order history.
+    match /bookings/{bookingId} {
+      allow create: if request.resource.data.customerPhone is string
+        && request.resource.data.customerPhone.size() >= 10
+        && request.resource.data.customerPhone.size() <= 15
+        && request.resource.data.quantity is int
+        && request.resource.data.quantity > 0
+        && request.resource.data.quantity <= 100
+        && request.resource.data.productName is string
+        && request.resource.data.productName.size() > 0
+        && request.resource.data.productName.size() <= 200
+        && request.resource.data.unitPrice is number
+        && request.resource.data.unitPrice >= 0
+        && request.resource.data.totalAmount is number
+        && request.resource.data.totalAmount >= 0;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Customer design submissions are public-create only; private customer data is admin-only.
+    match /designs/{designId} {
+      allow create: if request.resource.data.designId is string
+        && request.resource.data.designId.size() > 0
+        && request.resource.data.customerPhone is string
+        && request.resource.data.customerPhone.size() >= 10
+        && request.resource.data.customerPhone.size() <= 15;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /orders/{orderId} {
+      allow read: if isAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
+      allow create: if request.resource.data.customerName is string
+        && request.resource.data.customerName.size() > 0
+        && request.resource.data.customerName.size() <= 120
+        && request.resource.data.customerPhone is string
+        && request.resource.data.customerPhone.size() >= 10
+        && request.resource.data.customerPhone.size() <= 15
+        && request.resource.data.deliveryAddress is string
+        && request.resource.data.deliveryAddress.size() > 0
+        && request.resource.data.deliveryAddress.size() <= 300
+        && request.resource.data.items is list
+        && request.resource.data.items.size() > 0
+        && request.resource.data.items.size() <= 50
+        && request.resource.data.totalAmount is number
+        && request.resource.data.totalAmount >= 0
+        && (request.resource.data.orderStatus == "pending_whatsapp" || request.resource.data.orderStatus == "pending");
+      allow update, delete: if isAdmin();
+    }
+  }
+}

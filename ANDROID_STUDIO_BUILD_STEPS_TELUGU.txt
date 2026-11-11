@@ -1,0 +1,24 @@
+G GIFTS SHOPPING APP - APK BUILD STEPS (TELUGU)
+
+1) Ee ZIP file ni download chesi Extract All cheyyandi.
+2) Android Studio open chesi Open meeda click chesi extract chesina folder select cheyyandi.
+3) Android Studio Gradle Sync complete ayye varaku wait cheyyandi. Internet connection on lo undali.
+4) Firebase Console lo Authentication > Sign-in method > Google enable cheyyandi.
+5) Firebase Console lo Firestore Database mariyu Storage enable cheyyandi.
+6) Ee project lo firestore.rules mariyu storage.rules files ni mee Firebase project ki deploy cheyyandi. Firebase CLI setup unna terminal lo:
+   firebase deploy --only firestore:rules,storage
+7) app/google-services.json file mee Firebase project ki, Android package com.aistudio.ggifts.shopping.yvzqwx ki sambandhinchindani confirm cheyyandi.
+8) .env.example lo ADMIN_EMAIL daggara unna email okkate Admin. Vere email ki marchalante firestore.rules, storage.rules lo kuda ade email marchali.
+9) Android Studio menu: Build > Build Bundle(s) / APK(s) > Build APK(s).
+10) APK output: app/build/outputs/apk/debug/app-debug.apk
+
+APP LO CUSTOMER BOOKING:
+- Customer login lekunda products chusi booking cheyyavachu.
+- Booking save ayyaka WhatsApp lo booking details pre-filled ga open avutayi.
+- Customer WhatsApp lo Send button tap cheyyali. App WhatsApp message ni background lo automatic ga send cheyyaledu.
+- Shop QR code lo Firebase Store Settings lo set chesina websiteUrl encode avutundi. Aa URL public ga internet lo open avvali.
+
+IMPORTANT:
+- Ee ZIP source project maatrame; compiled APK kaadu.
+- Release / Play Store APK kosam mee own upload keystore create chesi secure ga backup chesukovali.
+- Firestore/Storage rules deploy cheyyakunda live customer data accept cheyyakandi.

@@ -1,0 +1,6 @@
+{
+  "name": "G Gifts Shopping App",
+  "description": "Full-stack shopping and booking app for G Gifts Toys Sports Decoration & Stationery Store in Hyderabad, featuring product management, UPI payments, and order tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

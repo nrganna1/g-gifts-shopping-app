@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>G Gifts Admin Dashboard</title>
+  <style>
+    :root {
+      --primary: #5b3cc4;
+      --primary-dark: #43289b;
+      --primary-soft: #efeafd;
+      --green: #166534;
+      --green-bg: #ecfdf5;
+      --amber: #9a3412;
+      --amber-bg: #fff7ed;
+      --red: #b91c1c;
+      --red-bg: #fef2f2;
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #18181b;
+      --muted: #52525b;
+      --border: #e4e4e7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      padding-bottom: 40px;
+    }
+
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 18px 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 9px 15px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-outline { background: #fff; border-color: var(--border); color: var(--text); }
+    .btn-danger { background: var(--red-bg); color: var(--red); border-color: #fecaca; }
+    .btn-whatsapp { background: #1fa855; color: #fff; }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      min-height: 44px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .form-group { margin-bottom: 10px; }
+    .form-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .form-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .notice {
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 10px 0;
+    }
+    .notice-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid #fed7aa; }
+    .notice-green { background: var(--green-bg); color: var(--green); border: 1px solid #a7f3d0; }
+    .notice-red { background: var(--red-bg); color: var(--red); border: 1px solid #fecaca; }
+
+    .list-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .list-row:last-child { border-bottom: none; }
+
+    .thumb {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #ede9fe;
+      flex-shrink: 0;
+    }
+
+    .qr-box {
+      display: inline-block;
+      padding: 12px;
+      background: #fff;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      margin: 10px 0;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; }
+      #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        text-align: center;
+        padding: 32px;
+      }
+      .no-print { display: none !important; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+</head>
+<body>
+  <header class="topbar no-print">
+    <div>
+      <strong style="color:var(--primary); font-size:17px;">G Gifts Admin Panel</strong>
+      <div style="font-size:12px; color:var(--muted);">Authorized Store Owner Only (nrganna1@gmail.com)</div>
+    </div>
+    <div id="authHeaderActions"></div>
+  </header>
+
+  <main class="container">
+    <div id="authGateCard" class="card no-print" style="max-width:500px; margin:40px auto; text-align:center;">
+      <h1 style="font-size:22px; margin-bottom:8px;">Store Administrator Sign-In</h1>
+      <p style="font-size:14px; color:var(--muted); margin-bottom:18px;">
+        Sign in with the authorized store owner Google account (<strong>nrganna1@gmail.com</strong>) to manage products, offers, QR codes, and bookings.
+      </p>
+      <button type="button" class="btn btn-primary" id="googleLoginBtn" style="width:100%;">
+        Sign in with Google
+      </button>
+      <div id="authMsg"></div>
+    </div>
+
+    <div id="adminWorkspace" style="display:none;">
+      <div class="tabs no-print">
+        <button type="button" class="tab-btn active" data-tab="products">Products &amp; Offers</button>
+        <button type="button" class="tab-btn" data-tab="bookings">Orders &amp; Bookings</button>
+        <button type="button" class="tab-btn" data-tab="qr">QR Codes &amp; Print</button>
+        <button type="button" class="tab-btn" data-tab="settings">Store Settings &amp; Spark Info</button>
+      </div>
+
+      <section id="tab-products" class="no-print"></section>
+      <section id="tab-bookings" class="no-print" style="display:none;"></section>
+      <section id="tab-qr" style="display:none;"></section>
+      <section id="tab-settings" class="no-print" style="display:none;"></section>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signInWithRedirect,
+      getRedirectResult,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      doc,
+      setDoc,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      onSnapshot,
+      orderBy,
+      query,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+    import {
+      getStorage,
+      ref,
+      uploadBytes,
+      getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBOgr8szVfJqsaIXlHfr_qrLJn1RGKSsaU",
+      authDomain: "gen-lang-client-0989190352.firebaseapp.com",
+      projectId: "gen-lang-client-0989190352",
+      storageBucket: "gen-lang-client-0989190352.firebasestorage.app",
+      messagingSenderId: "731327134496",
+      appId: "1:731327134496:android:f60f75040f2539fecc3545"
+    };
+
+    const FIRESTORE_DATABASE_ID = "ai-studio-android-ggiftssh-5ff5b7c9-9ff7-46fa-bab7-1632f008a438";
+    const AUTHORIZED_OWNER = "nrganna1@gmail.com";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app, FIRESTORE_DATABASE_ID);
+    const storage = getStorage(app);
+
+    const state = {
+      user: null,
+      products: [],
+      categories: [],
+      orders: [],
+      bookings: [],
+      settings: {
+        shopName: "G Gifts Toys Sports Decoration Store",
+        shopAddress: "Veera Reddy Nagar, Boduppal, Telangana",
+        contactNumber: "7036436305",
+        whatsAppNumber: "7036436305",
+        businessTimings: "10:00 AM - 10:00 PM",
+        websiteUrl: ""
+      },
+      editingProductId: null,
+      selectedQrProductId: "",
+      unsubs: []
+    };
+
+    function escapeHtml(s) {
+      return String(s ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function validateStoreUrl(raw) {
+      const val = String(raw || "").trim();
+      if (!val) {
+        return { ok: false, type: "unpublished", msg: "Publish the app first to generate a working Customer Store QR Code." };
+      }
+      let u;
+      try { u = new URL(val); } catch {
+        return { ok: false, type: "invalid", msg: "Invalid URL format. Enter a valid published HTTPS Customer Store URL." };
+      }
+      const host = u.hostname.toLowerCase();
+      const previewMatch =
+        host.startsWith("ais-dev-") ||
+        host.startsWith("ais-pre-") ||
+        (host.endsWith(".run.app") && (host.includes("ais-dev") || host.includes("ais-pre"))) ||
+        host.endsWith(".aistudio.google.com") ||
+        host === "aistudio.google.com" ||
+        host.endsWith(".makersuite.google.com") ||
+        host.endsWith(".usercontent.goog") ||
+        host.endsWith(".ai.studio") ||
+        host === "localhost" ||
+        host === "127.0.0.1" ||
+        /^10\.|^192\.168\.|^172\.(1[6-9]|2\d|3[01])\./.test(host) ||
+        ((host.endsWith(".web.app") || host.endsWith(".firebaseapp.com")) && host.split(".")[0].includes("--"));
+
+      if (previewMatch) {
+        return { ok: false, type: "unpublished", msg: "Publish the app first to generate a working Customer Store QR Code." };
+      }
+      if (u.protocol !== "https:") {
+        return { ok: false, type: "invalid", msg: "Customer Store URL must start with https://" };
+      }
+      const pathLower = u.pathname.toLowerCase();
+      const searchLower = u.search.toLowerCase();
+      const hashLower = u.hash.toLowerCase();
+      if (/\/(admin|admin-panel|adminpanel)/.test(pathLower) || /[?&](admin|role)=admin/.test(searchLower) || hashLower.includes("admin")) {
+        return { ok: false, type: "invalid", msg: "Admin Panel URLs cannot be used for the Customer Store QR Code." };
+      }
+      return { ok: true, url: val };
+    }
+
+    function drawQrToCanvas(canvas, text, size = 260) {
+      if (!window.qrcode || !canvas) return;
+      const qr = window.qrcode(0, "H");
+      qr.addData(text);
+      qr.make();
+      const count = qr.getModuleCount();
+      const ctx = canvas.getContext("2d");
+      canvas.width = size;
+      canvas.height = size;
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+      const pad = 12;
+      const cell = (size - pad * 2) / count;
+      ctx.fillStyle = "#000000";
+      for (let r = 0; r < count; r++) {
+        for (let c = 0; c < count; c++) {
+          if (qr.isDark(r, c)) {
+            ctx.fillRect(Math.floor(pad + c * cell), Math.floor(pad + r * cell), Math.ceil(cell), Math.ceil(cell));
+          }
+        }
+      }
+    }
+
+    // Handle redirect sign-in result if popup fell back to redirect
+    getRedirectResult(auth).catch((err) => {
+      if (err && err.message) {
+        document.getElementById("authMsg").innerHTML = `<div class="notice notice-red">${escapeHtml(err.message)}</div>`;
+      }
+    });
+
+    // Auth flow (Strict single verified store owner: nrganna1@gmail.com)
+    document.getElementById("googleLoginBtn").addEventListener("click", async () => {
+      const msgEl = document.getElementById("authMsg");
+      msgEl.innerHTML = "";
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: "select_account" });
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        if (err && (err.code === "auth/popup-blocked" || err.code === "auth/operation-not-supported-in-this-environment")) {
+          try {
+            await signInWithRedirect(auth, provider);
+          } catch (redirErr) {
+            msgEl.innerHTML = `<div class="notice notice-red">${escapeHtml(redirErr.message)}</div>`;
+          }
+        } else {
+          msgEl.innerHTML = `<div class="notice notice-red">${escapeHtml(err.message)}</div>`;
+        }
+      }
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      state.unsubs.forEach(u => { try { u(); } catch {} });
+      state.unsubs = [];
+
+      const gate = document.getElementById("authGateCard");
+      const work = document.getElementById("adminWorkspace");
+      const headerAct = document.getElementById("authHeaderActions");
+
+      if (!user) {
+        state.user = null;
+        gate.style.display = "block";
+        work.style.display = "none";
+        headerAct.innerHTML = "";
+        return;
+      }
+
+      const cleanEmail = (user.email || "").trim().toLowerCase();
+      if (cleanEmail !== AUTHORIZED_OWNER || !user.emailVerified) {
+        document.getElementById("authMsg").innerHTML =
+          `<div class="notice notice-red">Access Denied: ${escapeHtml(user.email || "This account")} is not authorized. Only verified store owner (${AUTHORIZED_OWNER}) can access Admin.</div>`;
+        await signOut(auth);
+        return;
+      }
+
+      state.user = user;
+      gate.style.display = "none";
+      work.style.display = "block";
+      headerAct.innerHTML = `
+        <span style="font-size:13px; margin-right:8px;">${escapeHtml(user.email)}</span>
+        <button type="button" class="btn btn-outline" id="signOutBtn">Sign Out</button>
+      `;
+      document.getElementById("signOutBtn").addEventListener("click", () => signOut(auth));
+
+      startAdminListeners();
+      renderAllTabs();
+    });
+
+    function startAdminListeners() {
+      state.unsubs.push(
+        onSnapshot(collection(db, "products"), (snap) => {
+          state.products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          renderProductsTab();
+          renderQrTab();
+        })
+      );
+      state.unsubs.push(
+        onSnapshot(query(collection(db, "orders"), orderBy("createdAt", "desc")), (snap) => {
+          state.orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          renderBookingsTab();
+        }, () => {})
+      );
+      state.unsubs.push(
+        onSnapshot(query(collection(db, "bookings"), orderBy("createdAt", "desc")), (snap) => {
+          state.bookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          renderBookingsTab();
+        }, () => {})
+      );
+      state.unsubs.push(
+        onSnapshot(doc(db, "settings", "global"), (snap) => {
+          if (snap.exists()) state.settings = { ...state.settings, ...snap.data() };
+          renderQrTab();
+          renderSettingsTab();
+        })
+      );
+    }
+
+    // Tab switching
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const target = btn.getAttribute("data-tab");
+        ["products", "bookings", "qr", "settings"].forEach(t => {
+          document.getElementById(`tab-${t}`).style.display = t === target ? "block" : "none";
+        });
+      });
+    });
+
+    function renderAllTabs() {
+      renderProductsTab();
+      renderBookingsTab();
+      renderQrTab();
+      renderSettingsTab();
+    }
+
+    function renderProductsTab() {
+      const el = document.getElementById("tab-products");
+      const editing = state.products.find(p => p.id === state.editingProductId) || null;
+      const imgs = editing && Array.isArray(editing.images) ? editing.images.join(", ") : "";
+
+      el.innerHTML = `
+        <div class="card">
+          <h2 style="font-size:18px; margin-bottom:12px;">${editing ? "Edit Product" : "Add New Product"}</h2>
+          <form id="productForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Product Name *</label>
+                <input class="form-input" id="pName" required value="${escapeHtml(editing?.name || "")}" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Category</label>
+                <input class="form-input" id="pCat" placeholder="Toys / Sports / Decoration / Stationery" value="${escapeHtml(editing?.category || "Toys")}" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Selling Price (₹) *</label>
+                <input class="form-input" id="pPrice" type="number" min="0" required value="${editing?.sellingPrice ?? ""}" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">MRP / Original Price (₹)</label>
+                <input class="form-input" id="pMrp" type="number" min="0" value="${editing?.originalPrice ?? ""}" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Offer Tag (e.g. Festival Offer / 20% OFF)</label>
+                <input class="form-input" id="pOffer" value="${escapeHtml(editing?.offerTag || "")}" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Available Stock *</label>
+                <input class="form-input" id="pStock" type="number" min="0" required value="${editing?.stock ?? 10}" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <input class="form-input" id="pDesc" value="${escapeHtml(editing?.description || "")}" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Upload Product Photo (Admin Only • JPG, PNG, WEBP, GIF)</label>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
+                <input type="file" id="pFileInput" accept="image/*" multiple style="display:none;" />
+                <button type="button" class="btn btn-outline" id="pUploadBtn">Choose Photo(s)</button>
+                <span id="pUploadStatus" style="font-size:13px; color:var(--muted);"></span>
+              </div>
+              <div id="pPreviewRow" style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Product Image URLs (comma-separated HTTPS links — free Spark alternative)</label>
+              <input class="form-input" id="pImgs" value="${escapeHtml(imgs)}" placeholder="https://..." />
+            </div>
+
+            <label style="display:flex; align-items:center; gap:8px; margin:10px 0; font-weight:700;">
+              <input type="checkbox" id="pEnabled" ${editing ? (editing.isEnabled !== false ? "checked" : "") : "checked"} />
+              Available / Visible in Customer Store
+            </label>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button type="submit" class="btn btn-primary">${editing ? "Update Product" : "Save New Product"}</button>
+              ${editing ? `<button type="button" class="btn btn-outline" id="cancelEditBtn">Cancel Edit</button>` : ""}
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 style="font-size:18px; margin-bottom:10px;">Store Products (${state.products.length})</h2>
+          ${state.products.length === 0 ? `<p style="color:var(--muted);">No products added yet.</p>` : state.products.map(p => {
+            const firstImg = Array.isArray(p.images) ? p.images[0] : (p.imageUrl || "");
+            return `
+              <div class="list-row">
+                <div style="display:flex; gap:12px; align-items:center; min-width:220px; flex:1;">
+                  ${firstImg ? `<img class="thumb" src="${escapeHtml(firstImg)}" alt="" />` : `<div class="thumb" style="display:flex;align-items:center;justify-content:center;">🎁</div>`}
+                  <div>
+                    <strong>${escapeHtml(p.name)}</strong>
+                    <div style="font-size:13px; color:var(--muted);">
+                      ₹${p.sellingPrice || 0} ${p.originalPrice > p.sellingPrice ? `(MRP ₹${p.originalPrice})` : ""} • Stock: ${p.stock ?? 0} • ${p.isEnabled !== false ? "Visible" : "Hidden"}
+                    </div>
+                    ${p.offerTag ? `<div style="font-size:12px; color:var(--amber); font-weight:700;">Offer: ${escapeHtml(p.offerTag)}</div>` : ""}
+                  </div>
+                </div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                  <button type="button" class="btn btn-outline" data-qr-id="${escapeHtml(p.id)}">Product QR</button>
+                  <button type="button" class="btn btn-outline" data-edit-id="${escapeHtml(p.id)}">Edit</button>
+                  <button type="button" class="btn btn-danger" data-del-id="${escapeHtml(p.id)}">Delete</button>
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+
+      const fileInput = document.getElementById("pFileInput");
+      document.getElementById("pUploadBtn").addEventListener("click", () => {
+        if (typeof fileInput.showPicker === "function") {
+          try { fileInput.showPicker(); return; } catch {}
+        }
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", async (e) => {
+        const files = Array.from(e.target.files || []);
+        const statusEl = document.getElementById("pUploadStatus");
+        const previewRow = document.getElementById("pPreviewRow");
+        if (files.length === 0) {
+          statusEl.textContent = "No image file selected.";
+          return;
+        }
+        previewRow.innerHTML = "";
+        files.forEach(f => {
+          const img = document.createElement("img");
+          img.src = URL.createObjectURL(f);
+          img.className = "thumb";
+          img.title = `${f.name} (${Math.round(f.size / 1024)} KB)`;
+          previewRow.appendChild(img);
+        });
+
+        statusEl.textContent = `Uploading ${files.length} photo(s) to Firebase Storage...`;
+        const uploaded = [];
+        for (const f of files) {
+          try {
+            const safeName = `product_${Date.now()}_${f.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+            const storageRef = ref(storage, `products/${safeName}`);
+            await uploadBytes(storageRef, f);
+            const url = await getDownloadURL(storageRef);
+            uploaded.push(url);
+          } catch (err) {
+            statusEl.innerHTML = `<span style="color:var(--red);">Storage upload failed (${escapeHtml(err.message)}). Note: Firebase Storage may require Blaze billing — paste a free HTTPS image URL below instead.</span>`;
+            return;
+          }
+        }
+        const imgInput = document.getElementById("pImgs");
+        const existing = imgInput.value.split(",").map(s => s.trim()).filter(Boolean);
+        imgInput.value = [...uploaded, ...existing].join(", ");
+        statusEl.innerHTML = `<span style="color:var(--green);">✓ Uploaded ${uploaded.length} photo(s)!</span>`;
+      });
+
+      if (document.getElementById("cancelEditBtn")) {
+        document.getElementById("cancelEditBtn").addEventListener("click", () => {
+          state.editingProductId = null;
+          renderProductsTab();
+        });
+      }
+
+      document.getElementById("productForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!state.user || (state.user.email || "").trim().toLowerCase() !== AUTHORIZED_OWNER) {
+          alert(`Access Denied: Only ${AUTHORIZED_OWNER} can manage products.`);
+          return;
+        }
+        const sellingPrice = Number(document.getElementById("pPrice").value) || 0;
+        const originalPrice = Number(document.getElementById("pMrp").value) || 0;
+        const discount = (originalPrice > sellingPrice && originalPrice > 0)
+          ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100)
+          : 0;
+        const payload = {
+          name: document.getElementById("pName").value.trim(),
+          category: document.getElementById("pCat").value.trim(),
+          sellingPrice,
+          originalPrice,
+          discount,
+          offerTag: document.getElementById("pOffer").value.trim(),
+          stock: Number(document.getElementById("pStock").value) || 0,
+          description: document.getElementById("pDesc").value.trim(),
+          images: document.getElementById("pImgs").value.split(",").map(s => s.trim()).filter(Boolean),
+          isEnabled: document.getElementById("pEnabled").checked,
+          customizable: false,
+          updatedAt: serverTimestamp()
+        };
+        try {
+          if (state.editingProductId) {
+            await setDoc(doc(db, "products", state.editingProductId), payload, { merge: true });
+            state.editingProductId = null;
+          } else {
+            payload.createdAt = serverTimestamp();
+            await addDoc(collection(db, "products"), payload);
+          }
+          renderProductsTab();
+        } catch (err) {
+          alert(`Failed to save product: ${err.message}`);
+        }
+      });
+
+      el.querySelectorAll("[data-edit-id]").forEach(b => b.addEventListener("click", () => {
+        state.editingProductId = b.getAttribute("data-edit-id");
+        renderProductsTab();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }));
+
+      el.querySelectorAll("[data-del-id]").forEach(b => b.addEventListener("click", async () => {
+        if (confirm("Delete this product permanently?")) {
+          try {
+            await deleteDoc(doc(db, "products", b.getAttribute("data-del-id")));
+          } catch (err) {
+            alert(`Failed to delete product: ${err.message}`);
+          }
+        }
+      }));
+
+      el.querySelectorAll("[data-qr-id]").forEach(b => b.addEventListener("click", () => {
+        state.selectedQrProductId = b.getAttribute("data-qr-id");
+        document.querySelector("[data-tab='qr']").click();
+        renderQrTab();
+      }));
+    }
+
+    function renderBookingsTab() {
+      const el = document.getElementById("tab-bookings");
+      el.innerHTML = `
+        <div class="card">
+          <h2 style="font-size:18px; margin-bottom:10px;">Cart Checkout Orders (${state.orders.length})</h2>
+          ${state.orders.length === 0 ? `<p style="color:var(--muted);">No cart orders recorded yet.</p>` : state.orders.map(o => {
+            const digits = String(o.customerPhone || "").replace(/[^0-9]/g, "");
+            const waNum = digits.length === 10 ? "91" + digits : digits;
+            const items = Array.isArray(o.items) ? o.items : [];
+            const itemsSummary = items.map(it => `${it.name} × ${it.quantity} (₹${Math.round((it.price || 0) * (it.quantity || 1))})`).join(", ");
+            const waText = encodeURIComponent(`Hello ${o.customerName || ""}, G Gifts Store Boduppal: Your Order #${o.id} (Total: ₹${Math.round(o.totalAmount || 0)}) status is now ${o.orderStatus || "Pending"}.`);
+            const statusLabel = o.orderStatus === "pending_whatsapp" ? "Pending WhatsApp" : (o.orderStatus || "Pending");
+            return `
+              <div class="list-row" style="align-items:flex-start;">
+                <div style="flex:1; min-width:220px;">
+                  <strong>Order #${escapeHtml(o.id)} • ${escapeHtml(statusLabel)}</strong>
+                  <div>${escapeHtml(o.customerName || "Customer")} — <strong>${escapeHtml(o.customerPhone || "")}</strong></div>
+                  ${o.deliveryAddress ? `<div style="font-size:13px; color:var(--muted);">Address: ${escapeHtml(o.deliveryAddress)}</div>` : ""}
+                  <div style="font-size:13px; margin-top:4px;">${escapeHtml(itemsSummary)}</div>
+                  <div style="font-weight:800; color:var(--green); margin-top:2px;">Total: ₹${Math.round(o.totalAmount || 0)}</div>
+                </div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                  <button type="button" class="btn btn-outline" data-o-status="Confirmed" data-o-id="${escapeHtml(o.id)}">Confirm</button>
+                  <button type="button" class="btn btn-outline" data-o-status="Ready for Pickup" data-o-id="${escapeHtml(o.id)}">Ready</button>
+                  <button type="button" class="btn btn-outline" data-o-status="Completed" data-o-id="${escapeHtml(o.id)}">Complete</button>
+                  <button type="button" class="btn btn-danger" data-o-status="Cancelled" data-o-id="${escapeHtml(o.id)}">Cancel</button>
+                  ${waNum ? `<a class="btn btn-whatsapp" href="https://wa.me/${waNum}?text=${waText}" target="_blank" rel="noopener">WhatsApp</a>` : ""}
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+
+        <div class="card">
+          <h2 style="font-size:18px; margin-bottom:10px;">Quick Product Bookings (${state.bookings.length})</h2>
+          ${state.bookings.length === 0 ? `<p style="color:var(--muted);">No quick bookings recorded yet.</p>` : state.bookings.map(b => {
+            const digits = String(b.customerPhone || "").replace(/[^0-9]/g, "");
+            const waNum = digits.length === 10 ? "91" + digits : digits;
+            const waText = encodeURIComponent(`Hello ${b.customerName || ""}, G Gifts Store Boduppal: Your booking #${b.bookingId} for ${b.productName} (Qty: ${b.quantity}, Total: ₹${b.totalAmount}) status is now ${b.status}.`);
+            return `
+              <div class="list-row" style="align-items:flex-start;">
+                <div>
+                  <strong>${escapeHtml(b.bookingId || b.id)} • ${escapeHtml(b.status || "Pending")}</strong>
+                  <div>${escapeHtml(b.customerName || "Customer")} — <strong>${escapeHtml(b.customerPhone)}</strong></div>
+                  <div style="font-size:13px; color:var(--muted);">${escapeHtml(b.productName)} × ${b.quantity} = ₹${b.totalAmount} (Store Pickup Only)</div>
+                </div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                  <button type="button" class="btn btn-outline" data-b-status="Confirmed" data-b-id="${escapeHtml(b.id)}">Confirm</button>
+                  <button type="button" class="btn btn-outline" data-b-status="Ready for Pickup" data-b-id="${escapeHtml(b.id)}">Ready</button>
+                  <button type="button" class="btn btn-outline" data-b-status="Completed" data-b-id="${escapeHtml(b.id)}">Complete</button>
+                  <a class="btn btn-whatsapp" href="https://wa.me/${waNum}?text=${waText}" target="_blank" rel="noopener">WhatsApp</a>
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+
+      el.querySelectorAll("[data-o-status]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          await updateDoc(doc(db, "orders", btn.getAttribute("data-o-id")), {
+            orderStatus: btn.getAttribute("data-o-status"),
+            updatedAt: serverTimestamp()
+          });
+        });
+      });
+
+      el.querySelectorAll("[data-b-status]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          await updateDoc(doc(db, "bookings", btn.getAttribute("data-b-id")), {
+            status: btn.getAttribute("data-b-status"),
+            updatedAt: serverTimestamp()
+          });
+        });
+      });
+    }
+
+    function renderQrTab() {
+      const el = document.getElementById("tab-qr");
+      const baseValidation = validateStoreUrl(state.settings.websiteUrl);
+      const selectedProduct = state.products.find(p => p.id === state.selectedQrProductId) || null;
+      const targetUrl = baseValidation.ok
+        ? (selectedProduct
+          ? `${baseValidation.url.split("#")[0]}${baseValidation.url.includes("?") ? "&" : "?"}product=${encodeURIComponent(selectedProduct.id)}`
+          : baseValidation.url)
+        : "";
+
+      el.innerHTML = `
+        <div class="card no-print">
+          <h2 style="font-size:18px; margin-bottom:8px;">QR Code Generator (Store &amp; Individual Product)</h2>
+          <div class="form-group">
+            <label class="form-label">Select QR Target</label>
+            <select class="form-input" id="qrProductSelect">
+              <option value="">Permanent Customer Store QR Code (All Products)</option>
+              ${state.products.map(p => `<option value="${escapeHtml(p.id)}" ${p.id === state.selectedQrProductId ? "selected" : ""}>Product QR: ${escapeHtml(p.name)} (₹${p.sellingPrice || 0})</option>`).join("")}
+            </select>
+          </div>
+        </div>
+
+        <div class="card" id="printArea" style="text-align:center;">
+          ${baseValidation.ok ? `
+            <h2 style="color:var(--primary); font-size:20px;">${escapeHtml(state.settings.shopName || "G Gifts Toys Sports Decoration Store")}</h2>
+            <p style="font-size:13px; color:var(--muted); margin-bottom:8px;">Veera Reddy Nagar, Boduppal, Telangana • WhatsApp: ${escapeHtml(state.settings.whatsAppNumber || "7036436305")}</p>
+            <h3 style="font-size:17px; margin-bottom:4px;">${selectedProduct ? escapeHtml(selectedProduct.name) + " (₹" + Math.round(selectedProduct.sellingPrice || 0) + ")" : "Scan to Shop & Book Now"}</h3>
+            <div class="qr-box"><canvas id="qrCanvas"></canvas></div>
+            <div style="font-size:12px; color:var(--primary); word-break:break-all; margin-bottom:12px;">${escapeHtml(targetUrl)}</div>
+            <p style="font-size:13px; color:var(--muted); margin-bottom:14px;">Store Pickup Only • No Home Delivery • Opens directly without login</p>
+            <div class="no-print" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary" id="downloadQrBtn">Download QR PNG</button>
+              <button type="button" class="btn btn-outline" id="printQrBtn">Print QR Code</button>
+            </div>
+          ` : `
+            <div class="notice notice-amber" style="text-align:left;">
+              <strong>${escapeHtml(baseValidation.msg)}</strong><br />
+              Go to <em>Store Settings</em> tab and save your permanent published HTTPS URL (e.g., <code>https://gen-lang-client-0989190352.web.app</code>).
+            </div>
+          `}
+        </div>
+      `;
+
+      document.getElementById("qrProductSelect").addEventListener("change", (e) => {
+        state.selectedQrProductId = e.target.value;
+        renderQrTab();
+      });
+
+      if (baseValidation.ok) {
+        const canvas = document.getElementById("qrCanvas");
+        drawQrToCanvas(canvas, targetUrl, 260);
+        document.getElementById("downloadQrBtn").addEventListener("click", () => {
+          const a = document.createElement("a");
+          a.download = selectedProduct ? `GGifts_${selectedProduct.id}_QR.png` : "GGifts_Store_QR.png";
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+        });
+        document.getElementById("printQrBtn").addEventListener("click", () => window.print());
+      }
+    }
+
+    function renderSettingsTab() {
+      const el = document.getElementById("tab-settings");
+      el.innerHTML = `
+        <div class="card">
+          <h2 style="font-size:18px; margin-bottom:10px;">Store Configuration</h2>
+          <form id="settingsForm">
+            <div class="form-group">
+              <label class="form-label">Published Customer Store URL (HTTPS)</label>
+              <input class="form-input" id="sWebsiteUrl" value="${escapeHtml(state.settings.websiteUrl || "")}" placeholder="https://gen-lang-client-0989190352.web.app" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Name</label>
+              <input class="form-input" id="sName" value="${escapeHtml(state.settings.shopName || "")}" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Pickup Address</label>
+              <input class="form-input" id="sAddress" value="${escapeHtml(state.settings.shopAddress || "")}" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">WhatsApp Number</label>
+              <input class="form-input" id="sWa" value="${escapeHtml(state.settings.whatsAppNumber || "7036436305")}" />
+            </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <div id="settingsStatus"></div>
+          </form>
+        </div>
+
+        <div class="notice notice-green">
+          <strong>100% Free Firebase Spark Plan Usage:</strong><br />
+          • Firebase Hosting (<code>public/index.html</code>) serves your public store free.<br />
+          • Cloud Firestore handles products, categories, settings, and WhatsApp booking logs within Spark daily free limits.<br />
+          • Note: Binary uploads to Firebase Storage require Blaze billing on some newer Firebase projects; pasting public HTTPS image URLs keeps your app 100% on the free Spark plan.
+        </div>
+      `;
+
+      document.getElementById("settingsForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const urlInput = document.getElementById("sWebsiteUrl").value.trim();
+        const status = document.getElementById("settingsStatus");
+        if (urlInput) {
+          const check = validateStoreUrl(urlInput);
+          if (!check.ok) {
+            status.innerHTML = `<div class="notice notice-red">${escapeHtml(check.msg)}</div>`;
+            return;
+          }
+        }
+        await setDoc(doc(db, "settings", "global"), {
+          websiteUrl: urlInput,
+          shopName: document.getElementById("sName").value.trim(),
+          shopAddress: document.getElementById("sAddress").value.trim(),
+          whatsAppNumber: document.getElementById("sWa").value.trim(),
+          contactNumber: document.getElementById("sWa").value.trim(),
+          deliveryCharges: 0,
+          pickupAvailable: true
+        }, { merge: true });
+        status.innerHTML = `<div class="notice notice-green">✓ Settings saved!</div>`;
+      });
+    }
+  </script>
+</body>
+</html>

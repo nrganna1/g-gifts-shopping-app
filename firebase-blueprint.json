@@ -1,0 +1,94 @@
+{
+  "collections": {
+    "users": {
+      "description": "Customer profiles",
+      "fields": {
+        "userId": "string",
+        "displayName": "string",
+        "email": "string",
+        "phoneNumber": "string",
+        "address": "string",
+        "role": "string (customer/admin)",
+        "createdAt": "timestamp",
+        "updatedAt": "timestamp"
+      }
+    },
+    "admins": {
+      "description": "Admin users list",
+      "fields": {
+        "email": "string"
+      }
+    },
+    "products": {
+      "description": "Store products",
+      "fields": {
+        "name": "string",
+        "description": "string",
+        "originalPrice": "number",
+        "sellingPrice": "number",
+        "discount": "number",
+        "stock": "number",
+        "category": "string",
+        "images": "array of strings",
+        "sizes": "array of strings",
+        "colors": "array of strings",
+        "isFeatured": "boolean",
+        "isBestSeller": "boolean",
+        "isEnabled": "boolean",
+        "customizable": "boolean",
+        "createdAt": "timestamp",
+        "updatedAt": "timestamp"
+      }
+    },
+    "categories": {
+      "description": "Product categories",
+      "fields": {
+        "name": "string",
+        "order": "number",
+        "image": "string"
+      }
+    },
+    "banners": {
+      "description": "Promotional banners",
+      "fields": {
+        "imageUrl": "string",
+        "offerText": "string",
+        "isEnabled": "boolean",
+        "order": "number"
+      }
+    },
+    "orders": {
+      "description": "Customer bookings and orders",
+      "fields": {
+        "orderId": "string",
+        "userId": "string",
+        "customerName": "string",
+        "customerPhone": "string",
+        "items": "array of objects (productId, name, quantity, price, customizationDetails)",
+        "subtotal": "number",
+        "deliveryCharges": "number",
+        "totalAmount": "number",
+        "deliveryType": "string (pickup/delivery)",
+        "deliveryAddress": "string",
+        "paymentStatus": "string (pending/paid)",
+        "orderStatus": "string (pending/confirmed/processing/ready_for_pickup/out_for_delivery/delivered/cancelled)",
+        "customizationDetails": "object (photoUrl, text, instructions)",
+        "createdAt": "timestamp",
+        "updatedAt": "timestamp"
+      }
+    },
+    "settings": {
+      "description": "Global app settings",
+      "fields": {
+        "shopName": "string",
+        "shopAddress": "string",
+        "contactNumber": "string",
+        "whatsAppNumber": "string",
+        "deliveryCharges": "number",
+        "minOrderAmount": "number",
+        "businessTimings": "string",
+        "pickupAvailable": "boolean"
+      }
+    }
+  }
+}
