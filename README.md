@@ -1,6 +1,6 @@
-# G Gifts Toys Sports Decoration Store (Customer Website + Android App)
+# G Gifts Shopping Store (Customer Website + Android App)
 
-**Store Name:** G Gifts Toys Sports Decoration Store  
+**Store Name:** G Gifts Shopping Store  
 **Location:** Veera Reddy Nagar, Boduppal, Telangana  
 **WhatsApp & Call Booking:** `7036436305` (`https://wa.me/917036436305`)  
 **Pickup Mode:** Store Pickup Only (No Home Delivery)
@@ -38,7 +38,7 @@ All static storefront hosting, Firestore product/booking operations, Google Admi
 ```bash
 npm install -g firebase-tools
 firebase login
-firebase use gen-lang-client-0989190352
+firebase use g-gifts-shopping-store
 ```
 
 ### 2. Deploy Security Rules & Public Customer Website (Spark Plan Free)
@@ -53,8 +53,8 @@ firebase deploy --only firestore:rules,hosting
 > ```
 
 ### 3. Activate Your Permanent QR Codes
-1. Open the published website URL output by `firebase deploy` (for example `https://gen-lang-client-0989190352.web.app`).
-2. Sign in to the Admin Panel (Android app or `https://gen-lang-client-0989190352.web.app/admin.html`) with `nrganna1@gmail.com`.
+1. Open the published website URL output by `firebase deploy` (for example `https://g-gifts-shopping-store.web.app`).
+2. Sign in to the Admin Panel (Android app or `https://g-gifts-shopping-store.web.app/admin.html`) with `nrganna1@gmail.com`.
 3. Open **Admin > Settings**, enter your published `https://` Customer Store URL, and tap **Save Store Settings**.
 4. **Download** or **Print** your permanent Customer Store QR Code and individual Product QR Codes, then scan from another phone on mobile data to verify!
 
@@ -62,6 +62,6 @@ firebase deploy --only firestore:rules,hosting
 
 ## Android Studio Build Steps
 1. Open this project in Android Studio (SDK Platform 36).
-2. Confirm `app/google-services.json` and `app/src/main/res/values/firebase_applet_config.xml` match project `gen-lang-client-0989190352`.
+2. Confirm `app/google-services.json` and `app/src/main/res/values/firebase_applet_config.xml` match project `g-gifts-shopping-store`.
 3. Add your debug/release SHA-1 & SHA-256 certificates in Firebase Console for Android Google Sign-In.
 4. Build APK via **Build > Build Bundle(s) / APK(s) > Build APK(s)** (`app/build/outputs/apk/debug/app-debug.apk`).
