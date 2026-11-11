@@ -9,7 +9,7 @@
   },
   "firestore": [
     {
-      "database": "ai-studio-android-ggiftssh-5ff5b7c9-9ff7-46fa-bab7-1632f008a438",
+      "database": "(default)",
       "rules": "firestore.rules"
     }
   ],
