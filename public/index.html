@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G Gifts Toys Sports Decoration Store — Boduppal</title>
+  <title>G Gifts Shopping Store — Boduppal</title>
   <meta name="description" content="Shop Toys, Sports, Decoration, Photo Frames, Sublimation Gifts & Stationery at G Gifts Store, Veera Reddy Nagar, Boduppal, Telangana. Book via WhatsApp for Store Pickup." />
   <style>
     :root {
@@ -622,7 +622,7 @@
       <div class="brand">
         <div class="brand-logo" aria-hidden="true">G</div>
         <div style="min-width:0;">
-          <div class="brand-title" id="shopTitle">G Gifts Toys Sports Decoration Store</div>
+          <div class="brand-title" id="shopTitle">G Gifts Shopping Store</div>
           <div class="brand-sub" id="shopSub">Veera Reddy Nagar, Boduppal, Telangana • Store Pickup Only</div>
         </div>
       </div>
@@ -648,7 +648,7 @@
           <span class="badge-pickup" id="pickupBadge">STORE PICKUP ONLY</span>
           <span class="badge-free" id="noHomeDeliveryBadge">No Home Delivery • Zero Delivery Charges</span>
         </div>
-        <div class="banner-title" id="bannerHeadline">G Gifts Toys Sports Decoration Store</div>
+        <div class="banner-title" id="bannerHeadline">G Gifts Shopping Store</div>
         <div class="banner-meta" id="bannerAddress">Location: Veera Reddy Nagar, Boduppal, Telangana • Phone / WhatsApp: 7036436305</div>
       </div>
       <a class="btn btn-outline" href="tel:7036436305" id="callStoreBtn">📞 Call 7036436305</a>
@@ -675,7 +675,7 @@
 
   <footer>
     <div>
-      <strong>G Gifts Toys Sports Decoration Store</strong><br />
+      <strong>G Gifts Shopping Store</strong><br />
       Veera Reddy Nagar, Boduppal, Telangana • Store Pickup Only (No Home Delivery)
     </div>
     <div>
@@ -726,7 +726,7 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
     import {
       getFirestore,
       collection,
@@ -736,20 +736,20 @@
       orderBy,
       query,
       serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+    } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBOgr8szVfJqsaIXlHfr_qrLJn1RGKSsaU",
-      authDomain: "gen-lang-client-0989190352.firebaseapp.com",
-      projectId: "gen-lang-client-0989190352",
-      storageBucket: "gen-lang-client-0989190352.firebasestorage.app",
-      messagingSenderId: "731327134496",
-      appId: "1:731327134496:android:f60f75040f2539fecc3545"
+      apiKey: "AIzaSyAdTgidlkLHNhKaolSNbXd4ktszOq4D2KI",
+      authDomain: "g-gifts-shopping-store.firebaseapp.com",
+      projectId: "g-gifts-shopping-store",
+      storageBucket: "g-gifts-shopping-store.firebasestorage.app",
+      messagingSenderId: "488196111526",
+      appId: "1:488196111526:web:cba37146f4050f7783c867"
     };
 
-    const FIRESTORE_DATABASE_ID = "ai-studio-android-ggiftssh-5ff5b7c9-9ff7-46fa-bab7-1632f008a438";
+    const FIRESTORE_DATABASE_ID = "(default)";
     const DEFAULT_WHATSAPP = "7036436305";
-    const DEFAULT_STORE_NAME = "G Gifts Toys Sports Decoration Store";
+    const DEFAULT_STORE_NAME = "G Gifts Shopping Store";
     const DEFAULT_STORE_ADDRESS = "Veera Reddy Nagar, Boduppal, Telangana";
     const DEFAULT_CATEGORIES = [
       "Toys",
@@ -1057,7 +1057,7 @@
           ${outOfStock ? "Currently Out of Stock" : `Available Stock: ${product.stock}`}
         </div>
         <p style="font-size:14px; color:var(--muted); margin-bottom:14px;">
-          ${escapeHtml(product.description || "Available at G Gifts Toys Sports Decoration Store, Veera Reddy Nagar, Boduppal, Telangana.")}
+          ${escapeHtml(product.description || "Available at G Gifts Shopping Store, Veera Reddy Nagar, Boduppal, Telangana.")}
         </p>
         <div class="notice-amber">
           Store Pickup Only (No Home Delivery) • Veera Reddy Nagar, Boduppal, Telangana
