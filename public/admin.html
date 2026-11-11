@@ -199,7 +199,7 @@
   </main>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
     import {
       getAuth,
       GoogleAuthProvider,
@@ -208,7 +208,7 @@
       getRedirectResult,
       signOut,
       onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
     import {
       getFirestore,
       collection,
@@ -221,24 +221,24 @@
       orderBy,
       query,
       serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+    } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
     import {
       getStorage,
       ref,
       uploadBytes,
       getDownloadURL
-    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
+    } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-storage.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBOgr8szVfJqsaIXlHfr_qrLJn1RGKSsaU",
-      authDomain: "gen-lang-client-0989190352.firebaseapp.com",
-      projectId: "gen-lang-client-0989190352",
-      storageBucket: "gen-lang-client-0989190352.firebasestorage.app",
-      messagingSenderId: "731327134496",
-      appId: "1:731327134496:android:f60f75040f2539fecc3545"
+      apiKey: "AIzaSyAdTgidlkLHNhKaolSNbXd4ktszOq4D2KI",
+      authDomain: "g-gifts-shopping-store.firebaseapp.com",
+      projectId: "g-gifts-shopping-store",
+      storageBucket: "g-gifts-shopping-store.firebasestorage.app",
+      messagingSenderId: "488196111526",
+      appId: "1:488196111526:web:cba37146f4050f7783c867"
     };
 
-    const FIRESTORE_DATABASE_ID = "ai-studio-android-ggiftssh-5ff5b7c9-9ff7-46fa-bab7-1632f008a438";
+    const FIRESTORE_DATABASE_ID = "(default)";
     const AUTHORIZED_OWNER = "nrganna1@gmail.com";
 
     const app = initializeApp(firebaseConfig);
@@ -253,7 +253,7 @@
       orders: [],
       bookings: [],
       settings: {
-        shopName: "G Gifts Toys Sports Decoration Store",
+        shopName: "G Gifts Shopping Store",
         shopAddress: "Veera Reddy Nagar, Boduppal, Telangana",
         contactNumber: "7036436305",
         whatsAppNumber: "7036436305",
@@ -758,7 +758,7 @@
 
         <div class="card" id="printArea" style="text-align:center;">
           ${baseValidation.ok ? `
-            <h2 style="color:var(--primary); font-size:20px;">${escapeHtml(state.settings.shopName || "G Gifts Toys Sports Decoration Store")}</h2>
+            <h2 style="color:var(--primary); font-size:20px;">${escapeHtml(state.settings.shopName || "G Gifts Shopping Store")}</h2>
             <p style="font-size:13px; color:var(--muted); margin-bottom:8px;">Veera Reddy Nagar, Boduppal, Telangana • WhatsApp: ${escapeHtml(state.settings.whatsAppNumber || "7036436305")}</p>
             <h3 style="font-size:17px; margin-bottom:4px;">${selectedProduct ? escapeHtml(selectedProduct.name) + " (₹" + Math.round(selectedProduct.sellingPrice || 0) + ")" : "Scan to Shop & Book Now"}</h3>
             <div class="qr-box"><canvas id="qrCanvas"></canvas></div>
