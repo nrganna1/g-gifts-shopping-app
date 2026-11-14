@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "488196111526",
+    "project_id": "g-gifts-shopping-store",
+    "storage_bucket": "g-gifts-shopping-store.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488196111526:android:f8cf6f56de94452283c867",
+        "android_client_info": {
+          "package_name": "com.aistudio.ggifts.shopping.yvzqwx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "488196111526-is2g5kbdu3gei34q376qjtcdkd08lci7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgBs6xpEY1kzzauvMJ6KbXK9NRBrW5TI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "488196111526-is2g5kbdu3gei34q376qjtcdkd08lci7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
